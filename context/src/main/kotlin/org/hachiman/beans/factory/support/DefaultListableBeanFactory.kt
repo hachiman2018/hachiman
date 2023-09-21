@@ -4,14 +4,26 @@ import org.hachiman.beans.exception.BeansException
 import org.hachiman.beans.factory.BeanFactory
 import org.hachiman.beans.factory.definition.BeanDefinition
 import org.hachiman.beans.factory.definition.BeanDefinitionRegistry
+import org.hachiman.util.ReflectionUtils
 
-class DefaultBeanFactory : BeanFactory, BeanDefinitionRegistry {
+class DefaultListableBeanFactory : BeanFactory, BeanDefinitionRegistry {
 
     private val beanDefinitionMap = mutableMapOf<String, BeanDefinition>()
 
 
+    /**
+     * 通过beanName获取beanDefinition, 并通过反射创建对象
+     */
     override fun getBean(name: String): Any {
-        TODO("Not yet implemented")
+        val beanDefinition = getBeanDefinition(name)
+        return createBean(beanDefinition)
+    }
+
+
+    private fun createBean(beanDefinition: BeanDefinition): Any {
+        val noArgConstructor = beanDefinition.beanClass.getDeclaredConstructor()
+        ReflectionUtils.makeAccessible(noArgConstructor)
+        return noArgConstructor.newInstance()
     }
 
     override fun <T> getBean(name: String, beanClass: Class<*>): T {
