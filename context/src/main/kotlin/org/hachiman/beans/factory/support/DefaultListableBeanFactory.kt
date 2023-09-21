@@ -4,7 +4,7 @@ import org.hachiman.beans.exception.BeansException
 import org.hachiman.beans.factory.BeanFactory
 import org.hachiman.beans.factory.definition.BeanDefinition
 import org.hachiman.beans.factory.definition.BeanDefinitionRegistry
-import org.hachiman.util.ReflectionUtils
+import org.hachiman.util.makeAccessible
 
 class DefaultListableBeanFactory : BeanFactory, BeanDefinitionRegistry {
 
@@ -14,24 +14,34 @@ class DefaultListableBeanFactory : BeanFactory, BeanDefinitionRegistry {
     /**
      * 通过beanName获取beanDefinition, 并通过反射创建对象
      */
-    override fun getBean(name: String): Any {
-        val beanDefinition = getBeanDefinition(name)
+    override fun getBean(beanName: String): Any {
+        val beanDefinition = getBeanDefinition(beanName)
         return createBean(beanDefinition)
     }
 
 
     private fun createBean(beanDefinition: BeanDefinition): Any {
         val noArgConstructor = beanDefinition.beanClass.getDeclaredConstructor()
-        ReflectionUtils.makeAccessible(noArgConstructor)
+        makeAccessible(noArgConstructor)
         return noArgConstructor.newInstance()
     }
 
-    override fun <T> getBean(name: String, beanClass: Class<*>): T {
-        TODO("Not yet implemented")
+    override fun <T> getBean(beanName: String, beanClass: Class<*>): T {
+        return getBean(beanName) as? T ?: throw BeansException("bean cast exception");
     }
 
+
     override fun <T> getBean(beanClass: Class<*>): T {
-        TODO("Not yet implemented")
+        // 通过beanDefinition遍历获取beanName
+        val beanNameList = beanDefinitionMap.filter {
+            beanClass.isAssignableFrom(it.value.beanClass)
+        }.map { it.key }
+
+        if (beanNameList.size == 1) {
+            return getBean(beanNameList[0], beanClass)
+        }
+        throw BeansException("find multiple bean");
+
     }
 
     override fun registerBeanDefinition(beanName: String, beanDefinition: BeanDefinition) {
