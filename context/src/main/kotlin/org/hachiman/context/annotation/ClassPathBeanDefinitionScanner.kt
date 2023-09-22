@@ -4,15 +4,13 @@ import org.hachiman.beans.factory.definition.BeanDefinition
 import org.hachiman.beans.factory.definition.BeanDefinitionRegistry
 import org.hachiman.extend.lowerFirst
 import org.hachiman.stereotype.Component
-import org.hachiman.util.scanPackage
+import org.hachiman.util.ClassScanner
 
 class ClassPathBeanDefinitionScanner(private val registry: BeanDefinitionRegistry) {
 
-
     fun scan(vararg packageNames: String) {
         packageNames.forEach { packageName ->
-            scanPackage(packageName, Component::class.java).forEach {
-                // 构建bean definition
+            ClassScanner(packageName, Component::class.java).scanPackage().forEach {
                 registry.registerBeanDefinition(getBeanName(it), BeanDefinition(it))
             }
         }

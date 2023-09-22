@@ -27,7 +27,7 @@ class DefaultListableBeanFactory : BeanFactory, BeanDefinitionRegistry {
     }
 
     override fun <T> getBean(beanName: String, beanClass: Class<*>): T {
-        return getBean(beanName) as? T ?: throw BeansException("bean cast exception");
+        return getBean(beanName) as? T ?: throw BeansException("bean cast exception")
     }
 
 
@@ -40,15 +40,23 @@ class DefaultListableBeanFactory : BeanFactory, BeanDefinitionRegistry {
         if (beanNameList.size == 1) {
             return getBean(beanNameList[0], beanClass)
         }
-        throw BeansException("find multiple bean");
+        throw BeansException("find multiple bean")
 
     }
 
+
     override fun registerBeanDefinition(beanName: String, beanDefinition: BeanDefinition) {
-        beanDefinitionMap[beanName] = beanDefinition;
+        beanDefinitionMap[beanName] = beanDefinition
     }
 
     override fun getBeanDefinition(beanName: String): BeanDefinition {
         return beanDefinitionMap[beanName] ?: throw BeansException("$beanName is not exist")
+    }
+
+
+    fun printBeanDefinition() {
+        beanDefinitionMap.forEach { (t, u) ->
+            println("beanName is $t,  beanClass is ${u.beanClass}")
+        }
     }
 }
