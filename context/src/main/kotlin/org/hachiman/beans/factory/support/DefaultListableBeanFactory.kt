@@ -5,30 +5,11 @@ import org.hachiman.beans.factory.BeanFactory
 import org.hachiman.beans.factory.definition.BeanDefinition
 import org.hachiman.beans.factory.definition.BeanDefinitionRegistry
 import org.hachiman.util.makeAccessible
+import java.util.HashMap
 
-class DefaultListableBeanFactory : BeanFactory, BeanDefinitionRegistry {
+class DefaultListableBeanFactory : AbstractBeanFactory() {
 
     private val beanDefinitionMap = mutableMapOf<String, BeanDefinition>()
-
-
-    /**
-     * 通过beanName获取beanDefinition, 并通过反射创建对象
-     */
-    override fun getBean(beanName: String): Any {
-        val beanDefinition = getBeanDefinition(beanName)
-        return createBean(beanDefinition)
-    }
-
-
-    private fun createBean(beanDefinition: BeanDefinition): Any {
-        val noArgConstructor = beanDefinition.beanClass.getDeclaredConstructor()
-        makeAccessible(noArgConstructor)
-        return noArgConstructor.newInstance()
-    }
-
-    override fun <T> getBean(beanName: String, beanClass: Class<*>): T {
-        return getBean(beanName) as? T ?: throw BeansException("bean cast exception")
-    }
 
 
     override fun <T> getBean(beanClass: Class<*>): T {

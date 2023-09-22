@@ -1,6 +1,8 @@
 import beans.Name
 import org.hachiman.beans.factory.support.DefaultListableBeanFactory
 import org.hachiman.context.annotation.ClassPathBeanDefinitionScanner
+import org.hachiman.extend.lowerFirst
+import org.hachiman.stereotype.Component
 import org.junit.jupiter.api.Test
 
 class ScanPackageTest {
@@ -15,10 +17,17 @@ class ScanPackageTest {
         val scan = ClassPathBeanDefinitionScanner(beanFactory)
         scan.scan(ScanPackageTest::class.java.packageName)
         beanFactory.printBeanDefinition()
-        val bean = beanFactory.getBean<Name>("name", Name::class.java)
-        val bean1 = beanFactory.getBean<Name>(Name::class.java)
-        bean.printName()
-        bean1.printName()
+        val bean1 = beanFactory.getBean("name")
+        val bean2 = beanFactory.getBean<Name>("name", Name::class.java)
+        val bean3 = beanFactory.getBean<Name>(Name::class.java)
+        if (bean1 is Name) {
+            println(bean1)
+            bean1.printName()
+        }
+        println(bean2)
+        bean2.printName()
+        println(bean3)
+        bean3.printName()
     }
 
     @Test
@@ -28,6 +37,15 @@ class ScanPackageTest {
         println(clazz.name)
         println(clazz.canonicalName)
         println(clazz.packageName)
+    }
+
+    @Test
+    fun testDetermineBeanName() {
+        val clazz = ScanPackageTest::class.java
+        val component = clazz.getAnnotation(Component::class.java)
+        component?.value?.ifBlank { clazz.simpleName.lowerFirst() }
+        val s = component?.value ?: clazz.simpleName.lowerFirst()
+        println(s)
     }
 
 

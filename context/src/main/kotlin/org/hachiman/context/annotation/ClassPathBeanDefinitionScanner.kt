@@ -4,23 +4,46 @@ import org.hachiman.beans.factory.definition.BeanDefinition
 import org.hachiman.beans.factory.definition.BeanDefinitionRegistry
 import org.hachiman.extend.lowerFirst
 import org.hachiman.stereotype.Component
+import org.hachiman.stereotype.Scope
 import org.hachiman.util.ClassScanner
 
 class ClassPathBeanDefinitionScanner(private val registry: BeanDefinitionRegistry) {
 
     fun scan(vararg packageNames: String) {
         packageNames.forEach { packageName ->
-            ClassScanner(packageName) { it.isAnnotationPresent(Component::class.java) }.scanPackage().forEach {
-                registry.registerBeanDefinition(getBeanName(it), BeanDefinition(it))
+            val candidates =
+                ClassScanner(packageName) { it.isAnnotationPresent(Component::class.java) }.scanPackage().map {
+                    BeanDefinition(it)
+                }
+            // set bean scope
+            candidates.forEach {
+                val scopeValue = resolveBeanScope(it)
+                if (scopeValue.isNotBlank()) {
+                    it.scope = scopeValue
+                }
+
+                // TODO 可考虑增加开关, 用于是否允许map覆盖
+                registry.registerBeanDefinition(determineBeanName(it.beanClass), it)
             }
+
         }
     }
+
 
     /**
      * 如果component指定则使用指定,否则使用类名首字母小写
      */
-    private fun getBeanName(clazz: Class<*>): String {
+    private fun determineBeanName(clazz: Class<*>): String {
         val component = clazz.getAnnotation(Component::class.java)
-        return component.value.ifBlank { clazz.simpleName.lowerFirst() };
+        return component.value.ifBlank { clazz.simpleName.lowerFirst() }
+    }
+
+
+    /**
+     * resolve bean scope
+     */
+    private fun resolveBeanScope(beanDefinition: BeanDefinition): String {
+        val scope = beanDefinition.beanClass.getAnnotation(Scope::class.java)
+        return scope?.value ?: ""
     }
 }
