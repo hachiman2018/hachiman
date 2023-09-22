@@ -6,17 +6,16 @@ import java.nio.file.attribute.BasicFileAttributes
 import kotlin.io.path.absolutePathString
 import kotlin.io.path.name
 
-class ClassScanner(private val packageName: String, private val clazz: Class<out Annotation>) {
+
+const val classSuffix = ".class"
+
+class ClassScanner(private val packageName: String, private val filter: (Class<*>) -> Boolean) {
 
     private val scannedClass = mutableListOf<Class<*>>()
-
-    private val classSuffix = ".class"
 
     private val classFilter: (String) -> Boolean = { it.endsWith(classSuffix) }
 
     private var cl: ClassLoader? = null
-
-    private val filter = { x: Class<*> -> x.isAnnotationPresent(clazz) }
 
     fun scanPackage(): List<Class<*>> {
         // load path resources

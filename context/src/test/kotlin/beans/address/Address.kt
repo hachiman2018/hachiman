@@ -3,6 +3,6 @@ package beans.address
 import org.hachiman.stereotype.Component
 
 
-@Component
+@Component(value = "myAddress")
 class Address {
 }

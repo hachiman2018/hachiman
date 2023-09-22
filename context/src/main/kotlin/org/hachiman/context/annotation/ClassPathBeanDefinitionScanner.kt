@@ -10,15 +10,17 @@ class ClassPathBeanDefinitionScanner(private val registry: BeanDefinitionRegistr
 
     fun scan(vararg packageNames: String) {
         packageNames.forEach { packageName ->
-            ClassScanner(packageName, Component::class.java).scanPackage().forEach {
+            ClassScanner(packageName) { it.isAnnotationPresent(Component::class.java) }.scanPackage().forEach {
                 registry.registerBeanDefinition(getBeanName(it), BeanDefinition(it))
             }
         }
     }
 
     /**
-     * bean名称首字母小节
-     * TODO Component可以修改名称
+     * 如果component指定则使用指定,否则使用类名首字母小写
      */
-    private fun getBeanName(it: Class<*>) = it.simpleName.lowerFirst()
+    private fun getBeanName(clazz: Class<*>): String {
+        val component = clazz.getAnnotation(Component::class.java)
+        return component.value.ifBlank { clazz.simpleName.lowerFirst() };
+    }
 }
