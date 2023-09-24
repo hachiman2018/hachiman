@@ -1,4 +1,4 @@
-package org.hachiman.stereotype
+package org.hachiman.context.annotation
 
 
 @Retention(AnnotationRetention.RUNTIME)

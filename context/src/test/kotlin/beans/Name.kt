@@ -1,7 +1,7 @@
 package beans
 
+import org.hachiman.context.annotation.Scope
 import org.hachiman.stereotype.Component
-import org.hachiman.stereotype.Scope
 
 
 @Component

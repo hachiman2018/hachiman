@@ -17,6 +17,8 @@ class BeanDefinition(val beanClass: Class<*>) {
     private var singleton = true
     private var property = false
 
+    var lazy = false
+
     var scope: String? = null
         set(value) {
             field = value

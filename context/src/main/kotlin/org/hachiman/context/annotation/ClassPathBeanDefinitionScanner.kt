@@ -4,7 +4,6 @@ import org.hachiman.beans.factory.definition.BeanDefinition
 import org.hachiman.beans.factory.definition.BeanDefinitionRegistry
 import org.hachiman.extend.lowerFirst
 import org.hachiman.stereotype.Component
-import org.hachiman.stereotype.Scope
 import org.hachiman.util.ClassScanner
 
 class ClassPathBeanDefinitionScanner(private val registry: BeanDefinitionRegistry) {
@@ -21,6 +20,8 @@ class ClassPathBeanDefinitionScanner(private val registry: BeanDefinitionRegistr
                 if (scopeValue.isNotBlank()) {
                     it.scope = scopeValue
                 }
+                val lazy = resolveLazy(it)
+                it.lazy = lazy
 
                 // TODO 可考虑增加开关, 用于是否允许map覆盖
                 registry.registerBeanDefinition(determineBeanName(it.beanClass), it)
@@ -45,5 +46,13 @@ class ClassPathBeanDefinitionScanner(private val registry: BeanDefinitionRegistr
     private fun resolveBeanScope(beanDefinition: BeanDefinition): String {
         val scope = beanDefinition.beanClass.getAnnotation(Scope::class.java)
         return scope?.value ?: ""
+    }
+
+    /**
+     * resolve bean lazy or not
+     */
+    private fun resolveLazy(beanDefinition: BeanDefinition): Boolean {
+        val lazy = beanDefinition.beanClass.getAnnotation(Lazy::class.java)
+        return lazy?.value ?: false
     }
 }
