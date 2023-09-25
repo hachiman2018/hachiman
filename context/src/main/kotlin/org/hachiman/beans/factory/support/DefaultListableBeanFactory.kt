@@ -1,13 +1,10 @@
 package org.hachiman.beans.factory.support
 
+import org.hachiman.ConfigurableListableBeanFactory
 import org.hachiman.beans.exception.BeansException
-import org.hachiman.beans.factory.BeanFactory
-import org.hachiman.beans.factory.definition.BeanDefinition
-import org.hachiman.beans.factory.definition.BeanDefinitionRegistry
-import org.hachiman.util.makeAccessible
-import java.util.HashMap
+import org.hachiman.beans.factory.config.BeanDefinition
 
-class DefaultListableBeanFactory : AbstractBeanFactory() {
+class DefaultListableBeanFactory : AbstractAutowireCapableBeanFactory(), ConfigurableListableBeanFactory {
 
     private val beanDefinitionMap = mutableMapOf<String, BeanDefinition>()
 

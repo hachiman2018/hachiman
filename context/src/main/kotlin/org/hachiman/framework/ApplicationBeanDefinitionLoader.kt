@@ -1,6 +1,6 @@
 package org.hachiman.framework
 
-import org.hachiman.beans.factory.definition.BeanDefinitionRegistry
+import org.hachiman.beans.factory.config.BeanDefinitionRegistry
 import org.hachiman.context.annotation.ClassPathBeanDefinitionScanner
 
 /**

@@ -1,7 +1,7 @@
 package org.hachiman.context.annotation
 
-import org.hachiman.beans.factory.definition.BeanDefinition
-import org.hachiman.beans.factory.definition.BeanDefinitionRegistry
+import org.hachiman.beans.factory.config.BeanDefinition
+import org.hachiman.beans.factory.config.BeanDefinitionRegistry
 import org.hachiman.extend.lowerFirst
 import org.hachiman.stereotype.Component
 import org.hachiman.util.ClassScanner

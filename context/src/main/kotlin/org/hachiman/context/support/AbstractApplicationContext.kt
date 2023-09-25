@@ -22,4 +22,9 @@ abstract class AbstractApplicationContext : ConfigurableApplicationContext {
     override fun <T> getBean(beanClass: Class<*>): T {
         return this.getBeanFactory().getBean(beanClass)
     }
+
+    override fun refresh() {
+
+
+    }
 }

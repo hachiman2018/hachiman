@@ -1,4 +1,4 @@
-package org.hachiman.beans.factory.definition
+package org.hachiman.beans.factory.config
 
 import org.hachiman.beans.exception.BeansException
 

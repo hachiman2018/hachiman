@@ -1,21 +1,26 @@
 package org.hachiman.beans.factory.support
 
 import org.hachiman.beans.exception.BeansException
-import org.hachiman.beans.factory.BeanFactory
-import org.hachiman.beans.factory.definition.BeanDefinition
-import org.hachiman.beans.factory.definition.BeanDefinitionRegistry
-import org.hachiman.util.makeAccessible
+import org.hachiman.beans.factory.config.BeanDefinition
+import org.hachiman.beans.factory.config.BeanDefinitionRegistry
+import org.hachiman.beans.factory.config.BeanPostProcessor
+import org.hachiman.beans.factory.config.ConfigurableBeanFactory
 
 /**
  * abstract BeanFactory
  *
  * provide singleton bean cache
  */
-abstract class AbstractBeanFactory : BeanFactory, BeanDefinitionRegistry {
+abstract class AbstractBeanFactory : ConfigurableBeanFactory, BeanDefinitionRegistry {
 
     // cache singleton bean
     private val singletonBeanCache = mutableMapOf<String, Any>()
 
+    // 用于存放BeanPostProcessor 在初始化bean时会链式调用所有的processor
+    protected val beanPostProcessors = mutableListOf<BeanPostProcessor>()
+
+
+    private fun containsCacheSingletonBean(beanName: String) = singletonBeanCache.containsKey(beanName)
 
     private fun getCacheSingletonBean(beanName: String): Any? = singletonBeanCache[beanName]
 
@@ -30,37 +35,33 @@ abstract class AbstractBeanFactory : BeanFactory, BeanDefinitionRegistry {
 
 
     private fun doGetBean(beanName: String): Any {
-        return getCacheSingletonBean(beanName) ?: createBean(beanName, getBeanDefinition(beanName))
+        return if (containsCacheSingletonBean(beanName)) {
+            getCacheSingletonBean(beanName) as Any
+        } else {
+            val beanDefinition = getBeanDefinition(beanName)
+            if (beanDefinition.isSingleton()) {
+                val singletonBean = createBean(beanName, beanDefinition)
+                singletonBeanCache[beanName] = singletonBean
+                singletonBean
+            } else if (beanDefinition.isProperty()) {
+                createBean(beanName, beanDefinition)
+            } else {
+                throw BeansException("bean scope not support to create")
+            }
+        }
     }
 
 
     /**
-     * 创建bean  TODO 后续可下放到子类
+     * 创建bean
      */
-    private fun createBean(beanName: String, beanDefinition: BeanDefinition): Any {
-        if (beanDefinition.beanClass.isInterface) {
-            throw BeansException("${beanDefinition.beanClass} is interface, create fail")
-        }
+    abstract fun createBean(beanName: String, beanDefinition: BeanDefinition): Any
 
-        if (beanDefinition.isSingleton()) {
-            val singletonBean = doCreate(beanDefinition)
-            singletonBeanCache[beanName] = singletonBean
-            return singletonBean
-        } else if (beanDefinition.isProperty()) {
-            return doCreate(beanDefinition)
-        }
-        throw BeansException("bean scope not support to create")
+    override fun addBeanPostProcessor(beanPostProcessor: BeanPostProcessor) {
+        //有则覆盖
+        beanPostProcessors.remove(beanPostProcessor)
+        beanPostProcessors.add(beanPostProcessor)
     }
 
-
-    /**
-     * TODO 现只支持无参构造函数,后续支持有参
-     */
-    private fun doCreate(beanDefinition: BeanDefinition): Any {
-        val noArgConstructor = beanDefinition.beanClass.getDeclaredConstructor()
-        makeAccessible(noArgConstructor)
-        return noArgConstructor.newInstance()
-
-    }
 
 }

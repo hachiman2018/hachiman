@@ -1,8 +1,8 @@
 package org.hachiman.context.support
 
 import org.hachiman.beans.factory.BeanFactory
-import org.hachiman.beans.factory.definition.BeanDefinition
-import org.hachiman.beans.factory.definition.BeanDefinitionRegistry
+import org.hachiman.beans.factory.config.BeanDefinition
+import org.hachiman.beans.factory.config.BeanDefinitionRegistry
 import org.hachiman.beans.factory.support.DefaultListableBeanFactory
 
 open class GenericApplicationContext : AbstractApplicationContext(), BeanDefinitionRegistry {
