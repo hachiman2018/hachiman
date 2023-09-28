@@ -10,23 +10,22 @@ class ClassPathBeanDefinitionScanner(private val registry: BeanDefinitionRegistr
 
     fun scan(vararg packageNames: String) {
         packageNames.forEach { packageName ->
-            val candidates =
-                ClassScanner(packageName) { it.isAnnotationPresent(Component::class.java) }.scanPackage().map {
-                    BeanDefinition(it)
-                }
-            // set bean scope
-            candidates.forEach {
-                val scopeValue = resolveBeanScope(it)
-                if (scopeValue.isNotBlank()) {
-                    it.scope = scopeValue
-                }
-                val lazy = resolveLazy(it)
-                it.lazy = lazy
+            ClassScanner(packageName) { it.isAnnotationPresent(Component::class.java) }.scanPackage().map {
+                BeanDefinition(it)
+            }.let {
+                // set bean scope
+                it.forEach {
+                    val scopeValue = resolveBeanScope(it)
+                    if (scopeValue.isNotBlank()) {
+                        it.scope = scopeValue
+                    }
+                    val lazy = resolveLazy(it)
+                    it.lazy = lazy
 
-                // TODO 可考虑增加开关, 用于是否允许map覆盖
-                registry.registerBeanDefinition(determineBeanName(it.beanClass), it)
+                    // TODO 可考虑增加开关, 用于是否允许map覆盖
+                    registry.registerBeanDefinition(determineBeanName(it.beanClass), it)
+                }
             }
-
         }
     }
 

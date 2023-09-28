@@ -10,12 +10,12 @@ interface BeanFactory {
     /**
      * gen bean by name and type
      */
-    fun <T> getBean(beanName: String, beanClass: Class<*>): T
+    fun <T> getBean(beanName: String, beanClass: Class<T>): T
 
     /**
      * get bean by type
      */
-    fun <T> getBean(beanClass: Class<*>): T
+    fun <T> getBean(beanClass: Class<T>): T
 
 
 }

@@ -17,14 +17,13 @@ class Application(private val mainApplicationClass: Class<*>) {
         val context: GenericApplicationContext = createApplicationContext()
 
 
-        context.refresh()
+
 
         // 前置扫描classpath下的文件并注册bean definition
         val loader = ApplicationBeanDefinitionLoader(context, *getAllPackages())
         loader.load()
 
-        // 加载beanPostProcessor
-
+        context.refresh()
 
         return context
     }

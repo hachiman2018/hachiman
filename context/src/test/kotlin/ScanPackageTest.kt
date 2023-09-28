@@ -18,8 +18,8 @@ class ScanPackageTest {
         scan.scan(ScanPackageTest::class.java.packageName)
         beanFactory.printBeanDefinition()
         val bean1 = beanFactory.getBean("name")
-        val bean2 = beanFactory.getBean<Name>("name", Name::class.java)
-        val bean3 = beanFactory.getBean<Name>(Name::class.java)
+        val bean2 = beanFactory.getBean("name", Name::class.java)
+        val bean3 = beanFactory.getBean(Name::class.java)
         if (bean1 is Name) {
             println(bean1)
             bean1.printName()

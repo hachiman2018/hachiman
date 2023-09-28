@@ -1,10 +1,11 @@
 package org.hachiman.context.support
 
 import org.hachiman.beans.factory.config.BeanPostProcessor
-import org.hachiman.context.ApplicationContext
 import org.hachiman.context.ApplicationContextAware
+import org.hachiman.context.ConfigurableApplicationContext
 
-class ApplicationContextAwareProcessor(private val applicationContext: GenericApplicationContext) : BeanPostProcessor {
+class ApplicationContextAwareProcessor(private val applicationContext: ConfigurableApplicationContext) :
+    BeanPostProcessor {
 
 
     // TODO 扩展更多的Aware接口
@@ -19,9 +20,7 @@ class ApplicationContextAwareProcessor(private val applicationContext: GenericAp
     }
 
     private fun callAware(bean: ApplicationContextAware) {
-        if (bean is ApplicationContext) {
-            bean.setApplicationContext(applicationContext)
-        }
+        bean.setApplicationContext(applicationContext)
     }
 
 }

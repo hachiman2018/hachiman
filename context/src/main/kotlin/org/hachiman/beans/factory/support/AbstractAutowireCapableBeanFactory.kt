@@ -1,11 +1,11 @@
 package org.hachiman.beans.factory.support
 
 import org.hachiman.beans.exception.BeansException
+import org.hachiman.beans.factory.config.AutowireCapableBeanFactory
 import org.hachiman.beans.factory.config.BeanDefinition
 import org.hachiman.util.makeAccessible
 
-abstract class AbstractAutowireCapableBeanFactory : AbstractBeanFactory() {
-
+abstract class AbstractAutowireCapableBeanFactory : AbstractBeanFactory(), AutowireCapableBeanFactory {
 
     /**
      * 创建bean

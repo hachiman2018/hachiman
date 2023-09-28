@@ -3,13 +3,14 @@ package org.hachiman.context.support
 import org.hachiman.beans.factory.BeanFactory
 import org.hachiman.beans.factory.config.BeanDefinition
 import org.hachiman.beans.factory.config.BeanDefinitionRegistry
+import org.hachiman.beans.factory.config.ConfigurableListableBeanFactory
 import org.hachiman.beans.factory.support.DefaultListableBeanFactory
 
 open class GenericApplicationContext : AbstractApplicationContext(), BeanDefinitionRegistry {
 
     private val beanFactory: DefaultListableBeanFactory = DefaultListableBeanFactory()
 
-    override fun getBeanFactory(): BeanFactory {
+    override fun getBeanFactory(): ConfigurableListableBeanFactory {
         return beanFactory
     }
 
