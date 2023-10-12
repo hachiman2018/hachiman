@@ -1,4 +1,6 @@
-import beans.aware.MyApplicationContextAware
+package beans
+
+import beans.component.aware.MyApplicationContextAware
 import org.hachiman.framework.Application
 import org.junit.jupiter.api.Test
 

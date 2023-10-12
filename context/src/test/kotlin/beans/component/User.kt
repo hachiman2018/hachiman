@@ -1,4 +1,4 @@
-package beans
+package beans.component
 
 import org.hachiman.stereotype.Component
 

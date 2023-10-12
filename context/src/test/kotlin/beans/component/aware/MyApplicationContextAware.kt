@@ -1,6 +1,6 @@
-package beans.aware
+package beans.component.aware
 
-import beans.Name
+import beans.component.Name
 import org.hachiman.context.ApplicationContext
 import org.hachiman.context.ApplicationContextAware
 import org.hachiman.stereotype.Component

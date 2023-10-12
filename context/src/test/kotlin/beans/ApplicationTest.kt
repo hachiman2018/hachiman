@@ -1,5 +1,7 @@
-import beans.User
-import beans.address.Address
+package beans
+
+import beans.component.User
+import beans.component.address.Address
 import org.hachiman.framework.Application
 import org.junit.jupiter.api.Test
 

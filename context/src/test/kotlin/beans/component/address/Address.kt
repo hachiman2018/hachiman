@@ -1,4 +1,4 @@
-package beans.address
+package beans.component.address
 
 import org.hachiman.stereotype.Component
 

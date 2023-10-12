@@ -1,4 +1,4 @@
-package beans
+package beans.component
 
 import org.hachiman.context.annotation.Scope
 import org.hachiman.stereotype.Component

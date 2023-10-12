@@ -1,4 +1,4 @@
-package beans.postprocessor
+package beans.component.postprocessor
 
 import org.hachiman.beans.factory.config.BeanPostProcessor
 import org.hachiman.stereotype.Component
