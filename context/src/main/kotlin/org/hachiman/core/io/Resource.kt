@@ -1,4 +1,4 @@
 package org.hachiman.core.io
 
-interface Resource {
+interface Resource : InputStreamResource {
 }

@@ -31,6 +31,7 @@ class Application(private val mainApplicationClass: Class<*>) {
     private fun prepareContext(context: ConfigurableApplicationContext) {
         // 前置扫描classpath下的文件并注册bean definition
         val loader = ApplicationBeanDefinitionLoader(getBeanDefinitionRegistry(context), *getAllPackages())
+
         loader.load()
     }
 
