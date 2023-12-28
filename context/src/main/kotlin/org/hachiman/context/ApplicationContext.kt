@@ -1,7 +1,7 @@
 package org.hachiman.context
 
-import org.hachiman.beans.factory.BeanFactory
+import org.hachiman.beans.factory.ListableBeanFactory
 
 
-interface ApplicationContext : BeanFactory {
+interface ApplicationContext : ListableBeanFactory {
 }

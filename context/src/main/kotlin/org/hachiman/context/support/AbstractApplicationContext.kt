@@ -19,6 +19,18 @@ abstract class AbstractApplicationContext : ConfigurableApplicationContext {
         return this.getBeanFactory().getBean(beanClass)
     }
 
+    override fun getBeanDefinitionCount(): Int {
+        return getBeanFactory().getBeanDefinitionCount()
+    }
+
+    override fun getBeanNamesForType(type: Class<*>): Array<String> {
+        return getBeanFactory().getBeanNamesForType(type)
+    }
+
+    override fun <T> getBeansOfType(type: Class<T>): List<T> {
+        return getBeanFactory().getBeansOfType(type)
+    }
+
     /**
      * 刷新整个容器
      */

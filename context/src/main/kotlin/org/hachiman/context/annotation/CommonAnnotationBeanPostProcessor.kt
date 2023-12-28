@@ -1,9 +1,9 @@
 package org.hachiman.context.annotation
 
+import jakarta.annotation.PostConstruct
+import jakarta.annotation.PreDestroy
 import org.hachiman.beans.factory.config.BeanPostProcessor
 import java.lang.reflect.Method
-import javax.annotation.PostConstruct
-import javax.annotation.PreDestroy
 
 
 /**
@@ -23,7 +23,7 @@ class CommonAnnotationBeanPostProcessor : BeanPostProcessor {
     }
 
 
-    override fun postProcessBeforeInitialization(bean: Any, beanName: String): Any? {
+    override fun postProcessBeforeInitialization(bean: Any, beanName: String): Any {
         val initMethods: List<Method> = findInitMethods(bean)
 
         invokeInitMethods(bean, initMethods)
@@ -50,7 +50,7 @@ class CommonAnnotationBeanPostProcessor : BeanPostProcessor {
         }
     }
 
-    override fun postProcessAfterInitialization(bean: Any, beanName: String): Any? {
+    override fun postProcessAfterInitialization(bean: Any, beanName: String): Any {
         return bean
     }
 }

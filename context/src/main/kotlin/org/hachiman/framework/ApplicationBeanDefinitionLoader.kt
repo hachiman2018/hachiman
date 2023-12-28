@@ -8,17 +8,15 @@ import org.hachiman.context.annotation.ClassPathBeanDefinitionScanner
  * TODO 增加基于注解扫描的实现 和 load的多种入参格式支持
  */
 class ApplicationBeanDefinitionLoader(
-    registry: BeanDefinitionRegistry,
-    private vararg val packagePaths: String
+        registry: BeanDefinitionRegistry,
+        private vararg val packagePaths: String
 ) {
 
     private val scanner = ClassPathBeanDefinitionScanner(registry)
 
 
     fun load() {
-        packagePaths.forEach {
-            scanner.scan(it)
-        }
+        scanner.scan(*packagePaths)
     }
 
 }
