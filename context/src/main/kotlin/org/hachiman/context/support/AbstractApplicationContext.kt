@@ -54,6 +54,10 @@ abstract class AbstractApplicationContext : ConfigurableApplicationContext {
         }
     }
 
+    override fun containsBeanDefinition(beanName: String): Boolean {
+        return getBeanFactory().containsBeanDefinition(beanName)
+    }
+
     /**
      * get beanFactory
      */

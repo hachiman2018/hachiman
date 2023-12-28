@@ -17,5 +17,9 @@ interface BeanFactory {
      */
     fun <T> getBean(beanClass: Class<T>): T
 
+    /**
+     * Check if this bean factory contains a bean definition with the given name.
+     */
+    fun containsBeanDefinition(beanName: String): Boolean
 
 }

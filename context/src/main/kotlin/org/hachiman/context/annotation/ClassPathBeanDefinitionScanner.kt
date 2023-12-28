@@ -9,6 +9,13 @@ import org.hachiman.util.ClassScanner
 class ClassPathBeanDefinitionScanner(private val registry: BeanDefinitionRegistry) {
 
     fun scan(vararg packageNames: String) {
+        doScan(packageNames)
+
+        // Register annotation config processors, if necessary.
+        AnnotationConfigUtils.registerAnnotationConfigProcessors(this.registry)
+    }
+
+    private fun doScan(packageNames: Array<out String>) {
         packageNames.forEach { packageName ->
             ClassScanner(packageName) { it.isAnnotationPresent(Component::class.java) }.scanPackage().map {
                 BeanDefinition(it)

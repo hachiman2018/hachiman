@@ -14,4 +14,10 @@ interface BeanDefinitionRegistry {
      */
     fun getBeanDefinition(beanName: String): BeanDefinition
 
+
+    /**
+     * check bean definition exist
+     */
+    fun containsBeanDefinition(beanName: String): Boolean
+
 }
